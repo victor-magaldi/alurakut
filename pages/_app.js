@@ -13,6 +13,17 @@ const GlobalStyle = createGlobalStyle`
     font-family: sans-serif;
     background-color: #d9e6f6;
   }
+  
+  #__next {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
 `;
 
 const theme = {
