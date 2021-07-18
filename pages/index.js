@@ -6,7 +6,7 @@ import {
   AlurakutProfileSidebarMenuDefault,
 } from "../src/lib/AlurakutCommon";
 import ProfileRelationsBoxWrapper from "../src/components/ProfileRelationsBoxWrapper";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function ProfileSidebar({ githubUser }) {
   return (
@@ -26,7 +26,27 @@ function ProfileSidebar({ githubUser }) {
     </Box>
   );
 }
-
+function ProfileRelationsBox({ title, items }) {
+  return (
+    <ProfileRelationsBoxWrapper>
+      <h2 className="smallTitle">
+        {title} ({items.length})
+      </h2>
+      <ul>
+        {/* {seguidores.map((itemAtual) => {
+          return (
+            <li key={itemAtual}>
+              <a href={`https://github.com/${itemAtual}.png`}>
+                <img src={itemAtual.image} />
+                <span>{itemAtual.title}</span>
+              </a>
+            </li>
+          )
+        })} */}
+      </ul>
+    </ProfileRelationsBoxWrapper>
+  );
+}
 export default function Home() {
   const usuarioAleatorio = "victor-magaldi";
   const [comunidades, setComunidades] = useState([
@@ -45,6 +65,19 @@ export default function Home() {
     "felipefialho",
   ];
 
+  const [seguidores, setSeguidores] = useState([]);
+  // 0 - Pegar o array de dados do github
+  useEffect(function () {
+    fetch("https://api.github.com/users/peas/followers")
+      .then(function (respostaDoServidor) {
+        return respostaDoServidor.json();
+      })
+      .then(function (respostaCompleta) {
+        setSeguidores(respostaCompleta);
+      });
+  }, []);
+
+  console.log("seguidores antes do retorn", seguidores);
   return (
     <>
       <AlurakutMenu githubUser={"victor-magaldi"} />
@@ -100,6 +133,7 @@ export default function Home() {
           className="profileRelationsArea"
           style={{ gridArea: "profileRelationsArea" }}
         >
+          <ProfileRelationsBox title="Seguidores" items={seguidores} />
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">Comunidades ({comunidades.length})</h2>
             <ul>
